@@ -1,0 +1,8 @@
+flexia-platform/
+├── frontend/
+│   ├── ads/
+│   │   ├── ads.html
+│   │   └── logo/
+│   │       └── flexia-logo.png
+│   └── logo/ (existing)
+└── ...
