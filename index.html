@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexia Launch Countdown</title>
+    <link rel="icon" href="logo/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .particles-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: linear-gradient(45deg, #9D4EDD, #7B2CBF);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.7);
+        }
+
+        .app-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            background: linear-gradient(45deg, #C77DFF, #9D4EDD, #7B2CBF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+        }
+
+        .tagline {
+            color: #9D4EDD;
+            font-size: 1.1rem;
+            margin-top: -5px;
+        }
+
+        /* Image Slideshow Section */
+        .slideshow-section {
+            text-align: center;
+            padding: 30px 20px;
+            margin: 30px 0;
+            background: rgba(20, 0, 40, 0.5);
+            border-radius: 20px;
+            border: 2px solid rgba(157, 78, 221, 0.3);
+        }
+
+        .slideshow-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: #C77DFF;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(199, 125, 255, 0.6);
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.4);
+        }
+
+        .slideshow-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            border-radius: 15px;
+        }
+
+        .slideshow-image.active {
+            opacity: 1;
+        }
+
+        .slideshow-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .slideshow-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(157, 78, 221, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slideshow-dot.active {
+            background: #9D4EDD;
+            transform: scale(1.2);
+        }
+
+        /* 3D Countdown Section */
+        .countdown-section {
+            text-align: center;
+            padding: 30px 0;
+            margin: 30px 0;
+            background: rgba(20, 0, 40, 0.5);
+            border-radius: 20px;
+            border: 2px solid rgba(157, 78, 221, 0.3);
+        }
+
+        .launch-text {
+            font-size: 1.8rem;
+            color: #C77DFF;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(199, 125, 255, 0.6);
+        }
+
+        .launch-date {
+            font-size: 1.2rem;
+            color: #9D4EDD;
+            margin-bottom: 30px;
+        }
+
+        /* 3D Number Container */
+        .countdown-3d-container {
+            perspective: 1000px;
+            margin: 20px 0;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .countdown-3d {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8rem;
+            font-weight: 900;
+            color: #FFD700;
+            text-shadow: 
+                0 1px 0 #FFC300,
+                0 2px 0 #FFAA00,
+                0 3px 0 #FF9500,
+                0 4px 0 #FF7F00,
+                0 5px 0 #CC6600,
+                0 6px 1px rgba(0,0,0,.3),
+                0 0 10px rgba(255, 215, 0, 0.5),
+                0 5px 10px rgba(0,0,0,.3),
+                0 15px 20px rgba(0,0,0,.2),
+                0 25px 30px rgba(0,0,0,.1);
+            display: inline-block;
+            line-height: 1;
+            transform-style: preserve-3d;
+            animation: float-3d 4s ease-in-out infinite;
+        }
+
+        @keyframes float-3d {
+            0%, 100% {
+                transform: translateY(0) rotateX(10deg) rotateY(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotateX(15deg) rotateY(10deg);
+            }
+        }
+
+        .days-label {
+            font-size: 2rem;
+            color: #FFD700;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Notify Me Button */
+        .notify-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+        }
+
+        .notify-text {
+            font-size: 1.2rem;
+            color: #C77DFF;
+            margin-bottom: 20px;
+        }
+
+        .notify-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFAA00);
+            color: #000;
+            font-weight: bold;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .notify-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+            background: linear-gradient(45deg, #FFAA00, #FFD700);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 50px 0;
+            background: rgba(20, 0, 40, 0.7);
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            color: #C77DFF;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(199, 125, 255, 0.5);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background: rgba(36, 0, 70, 0.8);
+            border: 1px solid #9D4EDD;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(157, 78, 221, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            color: #C77DFD;
+            margin-bottom: 15px;
+        }
+
+        .feature-desc {
+            color: #ccc;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Support Section */
+        .support-section {
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(10, 0, 20, 0.9);
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 1px solid rgba(157, 78, 221, 0.3);
+        }
+
+        .support-text {
+            font-size: 1.2rem;
+            color: #C77DFF;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .support-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: #fff;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .support-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.7);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 30px 20px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(157, 78, 221, 0.2);
+            margin-top: 50px;
+        }
+
+        /* Sparkle Particles */
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            box-shadow: 0 0 8px 2px #FFD700;
+            opacity: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .app-title {
+                font-size: 2rem;
+            }
+            
+            .countdown-3d {
+                font-size: 5rem;
+            }
+            
+            .days-label {
+                font-size: 1.5rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 10px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .slideshow-container {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-title {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .countdown-3d {
+                font-size: 4rem;
+            }
+            
+            .launch-text {
+                font-size: 1.3rem;
+            }
+            
+            .notify-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+            
+            .slideshow-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="particles-bg" id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <img src="logo/flexia-logo.png" alt="Flexia Logo" class="logo">
+                <h1 class="app-title">FLEXIA</h1>
+            </div>
+            <p class="tagline">The Future of Earning is Here</p>
+        </header>
+
+        <!-- Image Slideshow Section -->
+        <section class="slideshow-section">
+            <h2 class="slideshow-title">FLEXIA PREVIEW</h2>
+            <div class="slideshow-container">
+                <!-- Default placeholder images -->
+                <img src="images/slideshow/image1.jpg" class="slideshow-image active" alt="Flexia Feature 1">
+                <img src="images/slideshow/image2.jpg" class="slideshow-image" alt="Flexia Feature 2">
+                <img src="images/slideshow/image3.jpg" class="slideshow-image" alt="Flexia Feature 3">
+                <img src="images/slideshow/image4.jpg" class="slideshow-image" alt="Flexia Feature 4">
+                <img src="images/slideshow/image5.jpg" class="slideshow-image" alt="Flexia Feature 5">
+            </div>
+            <div class="slideshow-nav">
+                <div class="slideshow-dot active" data-index="0"></div>
+                <div class="slideshow-dot" data-index="1"></div>
+                <div class="slideshow-dot" data-index="2"></div>
+                <div class="slideshow-dot" data-index="3"></div>
+                <div class="slideshow-dot" data-index="4"></div>
+            </div>
+            <p style="margin-top: 20px; color: #9D4EDD; font-size: 0.9rem;">
+                Upload your images to: /images/slideshow/ (name them image1.jpg, image2.jpg, etc.)
+            </p>
+        </section>
+
+        <!-- 3D Countdown -->
+        <section class="countdown-section">
+            <h2 class="launch-text">LAUNCHING FEBRUARY 8, 2026</h2>
+            <p class="launch-date">Countdown in days only</p>
+            
+            <div class="countdown-3d-container">
+                <div class="countdown-3d" id="countdown-3d">
+                    <!-- 3D number will be generated here -->
+                </div>
+            </div>
+            
+            <div class="days-label" id="days-label">DAYS</div>
+        </section>
+
+        <!-- Notify Me Button -->
+        <section class="notify-section">
+            <p class="notify-text">Want to be the first to know when we launch?</p>
+            <button class="notify-btn" id="notify-btn">
+                <i class="fas fa-bell"></i> NOTIFY ME ON LAUNCH
+            </button>
+        </section>
+
+        <!-- Features -->
+        <section class="features-section">
+            <h2 class="section-title">HOW TO EARN ON FLEXIA</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-gamepad"></i></div>
+                    <h3 class="feature-title">Play & Win</h3>
+                    <p class="feature-desc">Play Snake, Coin Flip, and Plinko to win real money instantly. Multiple games with different difficulty levels and rewards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="feature-title">Refer & Earn</h3>
+                    <p class="feature-desc">Get ₦7,500 for every friend you refer. Unlimited earnings! Track your referrals and earnings in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fab fa-tiktok"></i></div>
+                    <h3 class="feature-title">TikTok Tasks</h3>
+                    <p class="feature-desc">Follow accounts on TikTok and earn ₦150 per task. Simple social media tasks that pay instantly upon completion.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3 class="feature-title">Daily Spin</h3>
+                    <p class="feature-desc">Spin the wheel daily for a chance to win up to ₦1,000! Free spin every 24 hours with guaranteed rewards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-trophy"></i></div>
+                    <h3 class="feature-title">Achievements</h3>
+                    <p class="feature-desc">Complete challenges to unlock cash rewards and bonuses. Daily, weekly, and monthly challenges available.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-wallet"></i></div>
+                    <h3 class="feature-title">Instant Withdrawals</h3>
+                    <p class="feature-desc">Withdraw your earnings directly to your bank account. No minimum withdrawal amount and instant processing.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support -->
+        <section class="support-section">
+            <p class="support-text">Join our WhatsApp community for updates, support, and exclusive content!</p>
+            <a href="https://chat.whatsapp.com/EO1wkUL817AFtQNP5lF9f7" class="support-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i> Join WhatsApp Group
+            </a>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2025 Flexia Platform. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: #9D4EDD;">Launching February 8, 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Generate particles for background
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 40;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 10 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(particle);
+            }
+        }
+
+        // Image Slideshow
+        function initSlideshow() {
+            const images = document.querySelectorAll('.slideshow-image');
+            const dots = document.querySelectorAll('.slideshow-dot');
+            let currentIndex = 0;
+            
+            function showSlide(index) {
+                // Hide all images
+                images.forEach(img => img.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+                
+                // Show current image
+                images[index].classList.add('active');
+                dots[index].classList.add('active');
+                
+                currentIndex = index;
+            }
+            
+            // Auto slide every 6 seconds
+            setInterval(() => {
+                let nextIndex = (currentIndex + 1) % images.length;
+                showSlide(nextIndex);
+            }, 6000);
+            
+            // Dot click events
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+            
+            // Preload images
+            images.forEach(img => {
+                const tempImage = new Image();
+                tempImage.src = img.src;
+            });
+        }
+
+        // Sparkle particles array
+        let sparkles = [];
+        const maxSparkles = 50;
+
+        // Create golden sparkle particles
+        function createSparkles() {
+            const countdownEl = document.getElementById('countdown-3d');
+            if (!countdownEl) return;
+            
+            const rect = countdownEl.getBoundingClientRect();
+            
+            // Create 2-3 sparkles per call
+            const sparkleCount = Math.floor(Math.random() * 2) + 2;
+            
+            for (let i = 0; i < sparkleCount && sparkles.length < maxSparkles; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                
+                // Random position around the number
+                const x = rect.left + Math.random() * rect.width;
+                const y = rect.top + Math.random() * rect.height;
+                
+                // Random size
+                const size = Math.random() * 3 + 2;
+                sparkle.style.width = `${size}px`;
+                sparkle.style.height = `${size}px`;
+                
+                // Set initial position
+                sparkle.style.left = `${x}px`;
+                sparkle.style.top = `${y}px`;
+                sparkle.style.opacity = '0.8';
+                
+                // Add to document and sparkles array
+                document.body.appendChild(sparkle);
+                sparkles.push({
+                    element: sparkle,
+                    x: x,
+                    y: y,
+                    velocityX: (Math.random() - 0.5) * 3,
+                    velocityY: (Math.random() - 0.5) * 3,
+                    createdAt: Date.now(),
+                    opacity: 0.8
+                });
+            }
+        }
+
+        // Update sparkle particles
+        function updateSparkles() {
+            const now = Date.now();
+            
+            for (let i = sparkles.length - 1; i >= 0; i--) {
+                const sparkle = sparkles[i];
+                const age = now - sparkle.createdAt;
+                
+                // Remove old sparkles (after 1 second)
+                if (age > 1000) {
+                    sparkle.element.remove();
+                    sparkles.splice(i, 1);
+                    continue;
+                }
+                
+                // Update position
+                sparkle.x += sparkle.velocityX;
+                sparkle.y += sparkle.velocityY;
+                
+                // Fade out
+                sparkle.opacity = 0.8 * (1 - age / 1000);
+                
+                // Update element
+                sparkle.element.style.left = `${sparkle.x}px`;
+                sparkle.element.style.top = `${sparkle.y}px`;
+                sparkle.element.style.opacity = sparkle.opacity;
+            }
+        }
+
+        // Countdown Timer to February 8, 2026 - Days Only
+        function updateCountdown() {
+            const launchDate = new Date('February 8, 2026 00:00:00').getTime();
+            const now = new Date().getTime();
+            const diff = launchDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown-3d').innerHTML = '00';
+                document.getElementById('days-label').innerHTML = 'LAUNCHED!';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            // Format days with leading zero if less than 100
+            let displayDays = days.toString();
+            if (days < 10) {
+                displayDays = '00' + days;
+            } else if (days < 100) {
+                displayDays = '0' + days;
+            }
+            
+            // Update the 3D number
+            document.getElementById('countdown-3d').innerHTML = displayDays;
+            
+            // Update the label with proper grammar
+            document.getElementById('days-label').innerHTML = days === 1 ? 'DAY' : 'DAYS';
+            
+            // Create sparkles when number updates
+            createSparkles();
+        }
+
+        // Notify Me Button functionality
+        function setupNotifyButton() {
+            const notifyBtn = document.getElementById('notify-btn');
+            
+            notifyBtn.addEventListener('click', function() {
+                const subject = encodeURIComponent('Notify Me on Launch - Flexia');
+                const body = encodeURIComponent('Please notify me when Flexia launches on February 8, 2026.\n\nI want to be among the first to experience the future of earning!\n\nBest regards,');
+                const mailtoLink = `mailto:flexiapremium@gmail.com?subject=${subject}&body=${body}`;
+                
+                // Open email client
+                window.location.href = mailtoLink;
+                
+                // Show confirmation message
+                notifyBtn.innerHTML = '<i class="fas fa-check"></i> EMAIL READY!';
+                notifyBtn.style.background = 'linear-gradient(45deg, #00FF00, #00CC00)';
+                
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    notifyBtn.innerHTML = '<i class="fas fa-bell"></i> NOTIFY ME ON LAUNCH';
+                    notifyBtn.style.background = 'linear-gradient(45deg, #FFD700, #FFAA00)';
+                }, 3000);
+            });
+        }
+
+        // Animation loop
+        function animate() {
+            updateSparkles();
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            initSlideshow();
+            updateCountdown();
+            setupNotifyButton();
+            
+            // Update countdown every second
+            setInterval(updateCountdown, 1000);
+            
+            // Start animation loop
+            animate();
+            
+            // Create initial sparkles
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => createSparkles(), i * 200);
+            }
+        });
+    </script>
+</body>
+</html>
